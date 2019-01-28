@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Demand Sites</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Demand</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @demand_sites.each do |demand_site| %>
+      <tr>
+        <td><%= demand_site.name %></td>
+        <td><%= demand_site.demand %></td>
+        <td><%= link_to 'Show', demand_site %></td>
+        <td><%= link_to 'Edit', edit_demand_site_path(demand_site) %></td>
+        <td><%= link_to 'Destroy', demand_site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Demand Site', new_demand_site_path %>

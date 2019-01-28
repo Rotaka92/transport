@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @supply_site.name %>
+</p>
+
+<p>
+  <strong>Capacity:</strong>
+  <%= @supply_site.capacity %>
+</p>
+
+<%= link_to 'Edit', edit_supply_site_path(@supply_site) %> |
+<%= link_to 'Back', supply_sites_path %>

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Supply site:</strong>
+  <%= @transportation.supply_site %>
+</p>
+
+<p>
+  <strong>Demand site:</strong>
+  <%= @transportation.demand_site %>
+</p>
+
+<p>
+  <strong>Cost factor:</strong>
+  <%= @transportation.cost_factor %>
+</p>
+
+<p>
+  <strong>Transported amount:</strong>
+  <%= @transportation.transported_amount %>
+</p>
+
+<%= link_to 'Edit', edit_transportation_path(@transportation) %> |
+<%= link_to 'Back', transportations_path %>
