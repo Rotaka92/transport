@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_24_085556) do
+ActiveRecord::Schema.define(version: 2019_01_31_091737) do
 
   create_table "demand_sites", force: :cascade do |t|
     t.string "name"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2019_01_24_085556) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["demand_site_id"], name: "index_transportations_on_demand_site_id"
+    t.index ["supply_site_id", "demand_site_id"], name: "index_transportations_on_supply_site_id_and_demand_site_id", unique: true
     t.index ["supply_site_id"], name: "index_transportations_on_supply_site_id"
   end
 

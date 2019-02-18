@@ -1,0 +1,291 @@
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  * Klassisches Transportmodell
+   2   
+   3  options
+   4      optcr=0
+   5  ;
+   6   
+   7  set      i       Angebotsorte
+   8           j       Nachfrageorte;
+   9   
+  10  parameter
+  11           A(i)    Angebot
+  12           N(j)    Nachfrage
+  13           c(i,j)  Kosten des Transports von i nach j;
+  14   
+  15  variables
+  16           Z       Zielfunktionswert;
+  17  positive variables
+  18           x       Transportmengen;
+  19   
+  20  Equations
+  21  Zielfunktion         Das ist die Zielfunktion
+  22  Angebot_abrufen(i)   Das Angebot muss abgerufen werden
+  23  Nachfrage_decken(j)  Die Nachfrage muss befriedigt werden;
+  24   
+  25  Zielfunktion..
+  26       Z =e= sum((i,j),c(i,j)*x(i,j));
+  27   
+  28  Angebot_abrufen(i)..
+  29       sum(j,x(i,j)) =e= A(i);
+  30   
+  31  Nachfrage_decken(j)..
+  32       sum(i,x(i,j)) =e= N(j);
+  33   
+  34  model transport /all/;
+  35   
+  36  * Daten der konkreten Instanz
+INCLUDE    /home/studi/sites/transport/GAMS/include.inc
+  38  set i /1*3/;
+  39  set j /1*4/;
+  40  A('1') = 40.0;
+  41  A('2') = 50.0;
+  42  A('3') = 42.0;
+  43  N('1') = 30.0;
+  44  N('2') = 34.0;
+  45  N('3') = 44.0;
+  46  N('4') = 24.0;
+  47  c('1','1') = 12.0;
+  48  c('1','2') = 4.0;
+  49  c('1','3') = 12.0;
+  50  c('1','4') = 14.0;
+  51  c('2','1') = 8.0;
+  52  c('2','2') = 18.0;
+  53  c('2','3') = 10.0;
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+  54  c('2','4') = 6.0;
+  55  c('3','1') = 16.0;
+  56  c('3','2') = 16.0;
+  57  c('3','3') = 2.0;
+  58  c('3','4') = 12.0;
+  59   
+  60  solve transport minimizing Z using lp;
+  61   
+  62  file xij / 'GAMS/solution_xij.txt' /;
+  63  put xij;
+  64   
+  65  loop(i,
+  66      loop(j,
+  67          put i.tl, j.tl, x.l(i,j) /;
+  68          );
+  69  );
+  70   
+  71  putclose xij;
+  72   
+  73  file ofv / 'GAMS/ofv.txt' /;
+  74  put ofv Z.l;
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  /home/studi/sites/transport/GAMS/Transportproblem.gms
+     2       37 INCLUDE        1      37  ./home/studi/sites/transport/GAMS/include.inc
+
+
+COMPILATION TIME     =        0.003 SECONDS      3 MB  24.9.1 r63795 LEX-LEG
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE transport Using LP From line 60
+
+
+---- Zielfunktion  =E=  Das ist die Zielfunktion
+
+Zielfunktion..  Z - 12*x(1,1) - 4*x(1,2) - 12*x(1,3) - 14*x(1,4) - 8*x(2,1) - 18*x(2,2) - 10*x(2,3) - 6*x(2,4) - 16*x(3,1) - 16*x(3,2) - 2*x(3,3) - 12*x(3,4) =E= 0 ; (LHS = 0)
+     
+
+---- Angebot_abrufen  =E=  Das Angebot muss abgerufen werden
+
+Angebot_abrufen(1)..  x(1,1) + x(1,2) + x(1,3) + x(1,4) =E= 40 ; (LHS = 0, INFES = 40 ****)
+     
+Angebot_abrufen(2)..  x(2,1) + x(2,2) + x(2,3) + x(2,4) =E= 50 ; (LHS = 0, INFES = 50 ****)
+     
+Angebot_abrufen(3)..  x(3,1) + x(3,2) + x(3,3) + x(3,4) =E= 42 ; (LHS = 0, INFES = 42 ****)
+     
+
+---- Nachfrage_decken  =E=  Die Nachfrage muss befriedigt werden
+
+Nachfrage_decken(1)..  x(1,1) + x(2,1) + x(3,1) =E= 30 ; (LHS = 0, INFES = 30 ****)
+     
+Nachfrage_decken(2)..  x(1,2) + x(2,2) + x(3,2) =E= 34 ; (LHS = 0, INFES = 34 ****)
+     
+Nachfrage_decken(3)..  x(1,3) + x(2,3) + x(3,3) =E= 44 ; (LHS = 0, INFES = 44 ****)
+     
+REMAINING ENTRY SKIPPED
+
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE transport Using LP From line 60
+
+
+---- Z  Zielfunktionswert
+
+Z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       Zielfunktion
+
+
+---- x  Transportmengen
+
+x(1,1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -12       Zielfunktion
+        1       Angebot_abrufen(1)
+        1       Nachfrage_decken(1)
+
+x(1,2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -4       Zielfunktion
+        1       Angebot_abrufen(1)
+        1       Nachfrage_decken(2)
+
+x(1,3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+      -12       Zielfunktion
+        1       Angebot_abrufen(1)
+        1       Nachfrage_decken(3)
+
+REMAINING 9 ENTRIES SKIPPED
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE transport Using LP From line 60
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            8
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           13
+NON ZERO ELEMENTS            37
+
+
+GENERATION TIME      =        0.022 SECONDS      4 MB  24.9.1 r63795 LEX-LEG
+
+
+EXECUTION TIME       =        0.023 SECONDS      4 MB  24.9.1 r63795 LEX-LEG
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE transport Using LP From line 60
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   transport           OBJECTIVE  Z
+     TYPE    LP                  DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  60
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE              644.0000
+
+ RESOURCE USAGE, LIMIT          0.064      1000.000
+ ITERATION COUNT, LIMIT         2    2000000000
+
+IBM ILOG CPLEX   24.9.1 r63795 Released Aug 30, 2017 LEG x86 64bit/Linux      
+Cplex 12.7.1.0
+
+Space for names approximately 0.00 Mb
+Use option 'names no' to turn use of names off
+LP status(1): optimal
+Cplex Time: 0.02sec (det. 0.01 ticks)
+Optimal solution found.
+Objective :         644.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU Zielfunkt~          .              .              .             1.0000      
+
+  Zielfunktion  Das ist die Zielfunktion
+
+---- EQU Angebot_abrufen  Das Angebot muss abgerufen werden
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1        40.0000        40.0000        40.0000         4.0000      
+2        50.0000        50.0000        50.0000          .          
+3        42.0000        42.0000        42.0000        -6.0000      
+
+---- EQU Nachfrage_decken  Die Nachfrage muss befriedigt werden
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1        30.0000        30.0000        30.0000         8.0000      
+2        34.0000        34.0000        34.0000         EPS         
+3        44.0000        44.0000        44.0000         8.0000      
+4        24.0000        24.0000        24.0000         6.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Z                 -INF          644.0000        +INF             .          
+
+  Z  Zielfunktionswert
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE transport Using LP From line 60
+
+
+---- VAR x  Transportmengen
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1          .             4.0000        +INF             .          
+1.2          .            34.0000        +INF             .          
+1.3          .             2.0000        +INF             .          
+1.4          .              .            +INF            4.0000      
+2.1          .            26.0000        +INF             .          
+2.2          .              .            +INF           18.0000      
+2.3          .              .            +INF            2.0000      
+2.4          .            24.0000        +INF             .          
+3.1          .              .            +INF           14.0000      
+3.2          .              .            +INF           22.0000      
+3.3          .            42.0000        +INF             .          
+3.4          .              .            +INF           12.0000      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:33 Page 9
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+**** PUT ERROR FOR FILE xij AT LINE 71: FILE CANNOT BE OPENED - NEW NAME INVENTED
+
+**** Open Error for PUTFILE RC=2 FN=/home/studi/sites/transport/GAMS/GAMS/solution_xij.txt
+**** Msg=No such file or directory
+**** New file name used is /home/studi/sites/transport/GAMS/gams1.put
+
+**** PUT ERROR FOR FILE ofv AT LINE 74: FILE CANNOT BE OPENED - NEW NAME INVENTED
+
+**** Open Error for PUTFILE RC=2 FN=/home/studi/sites/transport/GAMS/GAMS/ofv.txt
+**** Msg=No such file or directory
+**** New file name used is /home/studi/sites/transport/GAMS/gams2.put
+
+**** REPORT FILE SUMMARY
+
+xij /home/studi/sites/transport/GAMS/gams1.put
+ofv /home/studi/sites/transport/GAMS/gams2.put
+
+
+EXECUTION TIME       =        0.005 SECONDS      3 MB  24.9.1 r63795 LEX-LEG
+
+
+USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
+      Free Demo, +1 202-342-0180, support@gams.com, www.gams.com DC0000
+
+
+**** FILE SUMMARY
+
+Input      /home/studi/sites/transport/GAMS/Transportproblem.gms
+Output     /home/studi/sites/transport/GAMS/Transportproblem.lst

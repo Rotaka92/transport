@@ -1,13 +1,13 @@
 class ProblemController < ApplicationController
   def solve
     puts 'Optimization is started.'
-    
+
     respond_to do |format|
       if Problem.solve_with_gams == true
         format.html { redirect_to root_url, notice: 'Optimization started' }
       else
         format.html { redirect_to root_url, notice: 'Matrix is incomplete' }
-        
+
       end
     end
   end

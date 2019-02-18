@@ -34,7 +34,7 @@ Nachfrage_decken(j)..
 model transport /all/;
 
 * Daten der konkreten Instanz
-$include 'GAMS/include.inc'
+$include 'include.inc'
 
 solve transport minimizing Z using lp;
 

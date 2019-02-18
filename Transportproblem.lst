@@ -1,0 +1,99 @@
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:45 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  * Klassisches Transportmodell
+   2   
+   3  options
+   4      optcr=0
+   5  ;
+   6   
+   7  set      i       Angebotsorte
+   8           j       Nachfrageorte;
+   9   
+  10  parameter
+  11           A(i)    Angebot
+  12           N(j)    Nachfrage
+  13           c(i,j)  Kosten des Transports von i nach j;
+  14   
+  15  variables
+  16           Z       Zielfunktionswert;
+  17  positive variables
+  18           x       Transportmengen;
+  19   
+  20  Equations
+  21  Zielfunktion         Das ist die Zielfunktion
+  22  Angebot_abrufen(i)   Das Angebot muss abgerufen werden
+  23  Nachfrage_decken(j)  Die Nachfrage muss befriedigt werden;
+  24   
+  25  Zielfunktion..
+  26       Z =e= sum((i,j),c(i,j)*x(i,j));
+  27   
+  28  Angebot_abrufen(i)..
+  29       sum(j,x(i,j)) =e= A(i);
+  30   
+  31  Nachfrage_decken(j)..
+  32       sum(i,x(i,j)) =e= N(j);
+  33   
+  34  model transport /all/;
+  35   
+  36  * Daten der konkreten Instanz
+  37  $include 'include.inc'
+****                       $282
+  38   
+  39  solve transport minimizing Z using lp;
+****                                       $257
+  40   
+  41  file xij / 'GAMS/solution_xij.txt' /;
+  42  put xij;
+  43   
+  44  loop(i,
+****       $352
+  45      loop(j,
+****           $352
+  46          put i.tl, j.tl, x.l(i,j) /;
+****                            $141,352,352
+  47          );
+  48  );
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:45 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+  49   
+  50  putclose xij;
+  51   
+  52  file ofv / 'GAMS/ofv.txt' /;
+  53  put ofv Z.l;
+****            $141
+GAMS 24.9.1  r63795 Released Aug 30, 2017 LEX-LEG x86 64bit/Linux                                                                                                                                                                      02/17/19 23:14:45 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Error Messages
+
+
+141  Symbol declared but no values have been assigned. Check for missing
+        data definition, assignment, data loading or implicit assignment
+        via a solve statement.
+        A wild shot: You may have spurious commas in the explanatory
+        text of a declaration. Check symbol reference list.
+257  Solve statement not checked because of previous errors
+282  Unable to open include file
+352  Set has not been initialized
+
+**** 8 ERROR(S)   0 WARNING(S)
+
+
+COMPILATION TIME     =        0.003 SECONDS      2 MB  24.9.1 r63795 LEX-LEG
+
+
+USER: GAMS Development Corporation, USA              G871201/0000CA-ANY
+      Free Demo, +1 202-342-0180, support@gams.com, www.gams.com DC0000
+
+
+**** FILE SUMMARY
+
+Input      /home/studi/sites/transport/GAMS/Transportproblem.gms
+Output     /home/studi/sites/transport/Transportproblem.lst
+
+**** USER ERROR(S) ENCOUNTERED
